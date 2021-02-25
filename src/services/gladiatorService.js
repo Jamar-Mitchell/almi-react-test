@@ -1,20 +1,28 @@
-import csvFile from '../assets/gladiators.csv'
-import Papa from 'papaparse';
+import csvFile from "../assets/gladiators.csv";
+import Papa from "papaparse";
+import { forwardRef } from "react";
 
-var records = ""
-Papa.parse(csvFile, {
-    download: true,
-    header: true,
-    complete: function (input) {
-         records = input.data;
-    }
-});
+var records = "";
+
+const fetchData = () => {
+  return new Promise((res, err) => {
+    Papa.parse(csvFile, {
+      download: true,
+      header: true,
+      complete: function (input) {
+        records = input.data;
+        res(records);
+      },
+    });
+  });
+};
 
 const GladiatorService = {
-
-    get: function() {
-        return records;
-    },
+  get: async function () {
+    let records = await fetchData();
+    //console.log(records);
+    return records;
+  },
 };
 
 export default GladiatorService;
